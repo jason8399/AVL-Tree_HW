@@ -5,9 +5,9 @@
 #include "AVL_Tree.h"
 
 void menu(){
-	printf("1. Insert\n");
-	printf("2. Delete\n");
-	printf("3. EXIT\n");
+	printf("Insert 'i'\n");
+	printf("Delete 'd'\n");
+	printf("EXIT 'e'\n");
 }
 
 int main(int argc, const char *argv[]){
@@ -19,19 +19,19 @@ int main(int argc, const char *argv[]){
 		menu();
 		scanf("%s", input);
 		switch(*input){
-			case '1':
+			case 'i':
 				printf("Please enter a number: \n");
 				scanf("%d", &x.key);
 				avlInsert(&root, x, &unbalanced);
 				print_tree(&root);
 				break;
-			case '2':
+			case 'd':
 				printf("Please enter a number: \n");
 				scanf("%d", &x.key);
 				avlDelete(&root, x, &unbalanced);
 				print_tree(&root);
 				break;
-			case '3':
+			case 'e':
 				return 0;
 				break;
 			default:

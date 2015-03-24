@@ -81,6 +81,7 @@ void avlDelete(treePointer *parent, element x, int *unbalanced){
 		printf("The Tree is empty or NOT Found\n");
 		return;
 	}
+	parentKey = (*parent)->data.key;
 	if((x.key == (*parent)->data.key) && isLeaf(parent)){ /* is leaf */
 		free(*parent);
 		*parent = NULL;
@@ -104,7 +105,7 @@ void avlDelete(treePointer *parent, element x, int *unbalanced){
 					*unbalanced = FALSE;
 					break;
 				case -1:
-					rightRotation(parent, unbalanced);
+					delRightRotation(parent, unbalanced);
 					*unbalanced = TRUE;
 					break;
 			}
@@ -122,7 +123,7 @@ void avlDelete(treePointer *parent, element x, int *unbalanced){
 					*unbalanced = FALSE;
 					break;
 				case 1:
-					leftRotation(parent, unbalanced);
+					delLeftRotation(parent, unbalanced);
 					*unbalanced = TRUE;
 					break;
 
@@ -167,6 +168,43 @@ void leftRotation(treePointer *parent, int *unbalanced){
 	*unbalanced = FALSE;
 }
 
+void delLeftRotation(treePointer *parent, int *unbalanced){
+	treePointer grandChild, child;
+	child = (*parent)->leftChild;
+	if(child->bf == 1){
+		/* LL Rotation */
+		(*parent)->leftChild = child->rightChild;
+		child->rightChild = *parent;
+		(*parent)->bf = 0;
+		(*parent) = child;
+		(*parent)->bf = 0;
+	}
+	else{
+		/* LR Roatation */
+		grandChild = child->rightChild;
+		child->rightChild = grandChild->leftChild;
+		grandChild->leftChild = child;
+		(*parent)->leftChild = grandChild->rightChild;
+		grandChild->rightChild = *parent;
+		switch(grandChild->bf){
+			case 0:
+				(*parent)->bf = -1;
+				child->bf = 0;
+				grandChild->bf = 1;
+				break;
+			case 1:
+				(*parent)->bf = child->bf = 0;
+				break;
+			case -1:
+				(*parent)->bf = 0;
+				child->bf = 1;
+				break;
+		}
+		*parent = grandChild;
+	}
+	*unbalanced = TRUE;
+}
+
 void rightRotation(treePointer *parent, int *unbalanced){
 	treePointer grandChild, child;
 	child = (*parent)->rightChild;
@@ -201,6 +239,43 @@ void rightRotation(treePointer *parent, int *unbalanced){
 	}
 	(*parent)->bf = 0;
 	*unbalanced = FALSE;
+}
+
+void delRightRotation(treePointer *parent, int *unbalanced){
+	treePointer grandChild, child;
+	child = (*parent)->rightChild;
+	if(child->bf == -1){
+		/* RR Rotation */
+		(*parent)->rightChild = child->leftChild;
+		child->leftChild = *parent;
+		(*parent)->bf = 0;
+		(*parent) = child;
+		(*parent)->bf = 0;
+	}
+	else{
+		/* RL Rotataion */
+		grandChild = child->leftChild;
+		child->leftChild = grandChild->rightChild;
+		grandChild->rightChild = child;
+		(*parent)->rightChild = grandChild->leftChild;
+		grandChild->leftChild = *parent;
+		switch(grandChild->bf){
+			case -1:
+				(*parent)->bf = 1;
+				child->bf = 0;
+				break;
+			case 1:
+				(*parent)->bf = child->bf = 0;
+				break;
+			case 0:
+				(*parent)->bf = 0;
+				child->bf = -1;
+				grandChild->bf = -1;
+				break;
+		}
+		*parent = grandChild;
+	}
+	*unbalanced = TRUE;
 }
 
 int _print_t(treePointer *parent, int is_left, int offset, int depth, char s[20][255]){
