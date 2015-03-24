@@ -187,17 +187,17 @@ void delLeftRotation(treePointer *parent, int *unbalanced){
 		(*parent)->leftChild = grandChild->rightChild;
 		grandChild->rightChild = *parent;
 		switch(grandChild->bf){
-			case 0:
+			case -1:
 				(*parent)->bf = -1;
 				child->bf = 0;
-				grandChild->bf = 1;
 				break;
 			case 1:
 				(*parent)->bf = child->bf = 0;
 				break;
-			case -1:
+			case 0:
 				(*parent)->bf = 0;
 				child->bf = 1;
+				grandChild->bf = 1;
 				break;
 		}
 		*parent = grandChild;
