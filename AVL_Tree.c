@@ -202,9 +202,10 @@ void rightRotation(treePointer *parent, int *unbalanced){
 	(*parent)->bf = 0;
 	*unbalanced = FALSE;
 }
+
 int _print_t(treePointer *parent, int is_left, int offset, int depth, char s[20][255]){
 	char b[20];
-	int width = 5;
+	int i ,width = 5;
 
 	if (!*parent) return 0;
 
@@ -213,12 +214,12 @@ int _print_t(treePointer *parent, int is_left, int offset, int depth, char s[20]
 	int left  = _print_t(&(*parent)->leftChild,  1, offset, depth + 1, s);
 	int right = _print_t(&(*parent)->rightChild, 0, offset + left + width, depth + 1, s);
 
-	for (int i = 0; i < width; i++)
+	for (i = 0; i < width; i++)
 		s[2 * depth][offset + left + i] = b[i];
 
 	if (depth && is_left) {
 
-		for (int i = 0; i < width + right; i++)
+		for (i = 0; i < width + right; i++)
 			s[2 * depth - 1][offset + left + width/2 + i] = '=';
 
 		s[2 * depth - 1][offset + left + width/2] = '|';
@@ -226,7 +227,7 @@ int _print_t(treePointer *parent, int is_left, int offset, int depth, char s[20]
 
 	} else if (depth && !is_left) {
 
-		for (int i = 0; i < left + width; i++)
+		for (i = 0; i < left + width; i++)
 			s[2 * depth - 1][offset - width/2 + i] = '=';
 
 		s[2 * depth - 1][offset + left + width/2] = '|';
@@ -234,6 +235,7 @@ int _print_t(treePointer *parent, int is_left, int offset, int depth, char s[20]
 	}
 	return left + width + right;
 }
+
 void print_tree(treePointer *parent){
 	char s[20][255];
 	int i;
